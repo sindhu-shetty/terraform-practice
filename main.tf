@@ -8,10 +8,10 @@ terraform {
 }
 
 provider  "aws"{
-  region = "ap-south-1"
+  region = var.aws_region
 }
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpc_cidr
 }
 resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.main.id
@@ -60,7 +60,7 @@ resource "aws_security_group" "web" {
 }
 resource "aws_instance" "server" {
   ami                         = "ami-0a9723306502e2558"
-  instance_type               = "t3.micro"
+  instance_type = var.instance_type
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.web.id]
   key_name                    = "sindhu-key"
